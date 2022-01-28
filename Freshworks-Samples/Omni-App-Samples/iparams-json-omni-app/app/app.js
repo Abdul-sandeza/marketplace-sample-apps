@@ -19,7 +19,7 @@ function data_method() {
       console.log(data, result);
     },
     (error) => {
-      errorHandler(err);
+      errorHandler(error);
     },
   );
 }
