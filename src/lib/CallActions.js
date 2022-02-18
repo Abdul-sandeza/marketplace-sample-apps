@@ -11,6 +11,7 @@ export function makeOutboundCall(name,number) {
     agent.connect(callNumber, {
         success: () => {
             console.log("sent outbound call");
+            store.dispatch('call/updateOnOutboundFlag',true)
         },
         failure: (err) => {
         console.log("Failed to send outbound call");

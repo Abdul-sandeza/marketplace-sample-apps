@@ -12,9 +12,17 @@ const state = {
     contact_attributes: {},
     contact_id: 0,
     on_destroyed_flag:false,
+    on_outbound_flag:false,
     dialedNumber: "",
-
-    countryCode : { country : "us" , code : "+1" }
+    start_time:"",
+    end_time:"",
+    displayHours:"00",
+    displayMinutes:"00",
+    displaySeconds:"00",
+    onSetTimerFlag:false,
+    callDuration:"",
+    countryCode : { country : "us" , code : "+1" },
+    fs_call_type: false
   }
   
   const mutations = {
@@ -54,6 +62,36 @@ const state = {
     },
     SET_ONDESTROYED_FLAG: (state, flag) => {
       state.on_destroyed_flag = flag
+    },
+    SET_START_TIME:(state,status)=>{
+      state.start_time = status
+    },
+    SET_END_TIME:(state,status)=>{
+      state.end_time = status
+    },
+    SET_DISPLAY_HOURS:(state,status)=>{
+      state.displayHours = status
+
+    },
+    SET_DISPLAY_MINUTES:(state,status)=>{
+      state.displayMinutes = status
+
+    },
+    SET_DISPLAY_SECONDS:(state,status)=>{
+      state.displaySeconds = status
+
+    },
+    SET_ON_SET_TIMER_FLAG:(state,status)=>{
+      state.onSetTimerFlag = status
+    },
+    SET_CALL_DURATION:(state,status)=>{
+      state.callDuration = status
+    },
+    SET_ON_OUTBOUND_FLAG:(state,status)=>{
+      state.on_outbound_flag = status
+    },
+    SET_FS_CALL_TYPE:(state,status)=>{
+      state.fs_call_type = status
     }
   }
   
@@ -85,11 +123,22 @@ const state = {
 
       let name = "Unknown Caller";
       let caller_id = 0;
+      let email = ""
+      let first_name = ""
+      let last_name = ""
+      let mobile_number = ""
+      let work_number = ""
         try {
             if(attributes.customerInfo) {
                 let info = JSON.parse(attributes.customerInfo.value)
+                console.log("THIS IS CUSTOMERINFO",info)
                 name = info.name
-                caller_id = info.id
+                caller_id = info.caller_id
+                email = info.email
+                first_name = info.first_name
+                last_name=  info.last_name
+                mobile_number= info.mobile_number
+                work_number= info.work_number
             }
         } catch(e) {
             console.log(e)
@@ -110,6 +159,43 @@ const state = {
       console.log(flag)
       commit('SET_ONDESTROYED_FLAG', flag)
     },
+    updateOnOutboundFlag({commit},flag){
+      console.log("THIS IS OUTBOUND FLAG",flag)
+      commit('SET_ON_OUTBOUND_FLAG',flag)
+    },
+    updateStartTime({commit},status){
+      console.log(status)
+      commit('SET_START_TIME',status)
+    },
+    updateEndTime({commit},status){
+      console.log(status)
+      commit('SET_END_TIME',status)
+    },
+    updateHours({commit},status){
+      console.log(status)
+      commit('SET_DISPLAY_HOURS',status)
+    },
+    updateMinutes({commit},status){
+      console.log(status)
+      commit('SET_DISPLAY_MINUTES',status)
+    },
+    updateSeconds({commit},status){
+      console.log(status)
+      commit('SET_DISPLAY_SECONDS',status)
+    },
+    updateOnSetTimerFlag({commit},status){
+      console.log(status)
+      commit('SET_ON_SET_TIMER_FLAG',status)
+    },
+    updateCallDuration({commit},status){
+      commit('SET_CALL_DURATION',status)
+    },
+    updateFsCallType({commit},status){
+      commit('SET_FS_CALL_TYPE',status)
+    },
+    updateCallerId({commit},status){
+      commit('SET_CALLER_ID',status)
+    }
   }
   
   export default {

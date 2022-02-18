@@ -4,6 +4,8 @@
           <h6>{{ call_state }}</h6>
           <h5>{{callerName()}}</h5>
           <h6>{{ caller_number}}</h6>
+          <h9 :state="time" v-if="call_state=='CONNECTED'">{{displayHours}}:{{displayMinutes}}:{{displaySeconds}}</h9>
+          
           <div class="call-handle-buttons-container">
               <b-button size="sm" @click="OnholdToggleInitialCall()" id="tooltip-target-hold" pill class="call-control-buttons" :variant="hold_status ? 'warning' : 'secondary'">
                   <font-awesome-icon  :icon="hold_status ? 'play' : 'pause'" size="sm"/>
@@ -47,7 +49,8 @@ export default {
   name: 'IncomingCall',
   data() {
     return {
-        pageUrl : "home"
+        pageUrl : "home",
+
     }
   },
   methods: {
@@ -72,6 +75,14 @@ export default {
       }else{
         return this.caller_name
       }
+    },
+    showRemaining(){
+      const timer = setInterval(()=>{
+        const startTime = new Date(this.start_time).getTime();
+        const endTime = new Date(this.end_time).getTime();
+        
+
+      })
     }
   },
   computed: {
@@ -80,8 +91,22 @@ export default {
       'caller_name',
       'caller_number',
       'mute_status',
-      'hold_status'
-    ])
+      'hold_status',
+      'start_time',
+      'end_time',
+      'displayHours',
+      'displayMinutes',
+      'displaySeconds'
+    ]),
+    time(){
+      if(this.call_state == 'CONNECTED'){
+        function startTime(){
+          this.displaySeconds += 1;
+          
+        }
+        setInterval(startTime,1000)
+      }
+    }
   }
 }
 </script>

@@ -22,7 +22,7 @@
             <p class="call-history-values call-history-values-date">{{ call.calledTime }}</p>
             </b-col>
           <b-col cols="3" class="text-left">
-            <font-awesome-icon  class="contact-side-icon" style="color:#ccc;cursor:pointer;" v-b-tooltip.hover title="Call"  @click="dialFromHistory(call.callerName,call.callerNumber)" id="index" icon="phone-alt" size="sm"/>
+            <font-awesome-icon  class="contact-side-icon" style="color:#ccc;cursor:pointer;" v-b-tooltip.hover title="Call"  @click="dialFromHistory(call.callerName,call.callerNumber,call.callerId)" id="index" icon="phone-alt" size="sm"/>
              <!-- <b-tooltip target="index" noninteractive=true triggers="hover">
                         Call
              </b-tooltip> -->
@@ -41,11 +41,11 @@
          
           <b-col cols="1"><font-awesome-icon style="color:#ccc" icon="user" size="lg"/></b-col>
           <b-col cols="7">
-            <p @click="openContact(call.contactId)" class="call-history-values call-history-values-name" >{{ call.contactName }}</p>
+            <p @click="openContact(call.callerId)" class="call-history-values call-history-values-name" >{{ call.contactName }}</p>
             <p class="call-history-values call-history-values-number">{{ call.contactNumber }}</p>
             </b-col>
           <b-col cols="3" class="text-left">
-            <font-awesome-icon class="contact-side-icon" style="color:#ccc;cursor:pointer" v-b-tooltip.hover title="Call" id="tooltip-target-5" @click="dialFromHistory(call.contactName,call.contactNumber)" icon="phone-alt" size="sm"/>
+            <font-awesome-icon class="contact-side-icon" style="color:#ccc;cursor:pointer" v-b-tooltip.hover title="Call" id="tooltip-target-5" @click="dialFromHistory(call.contactName,call.contactNumber,call.callerId)" icon="phone-alt" size="sm"/>
              <!-- <b-tooltip target="tooltip-target-5" triggers="hover">
                         Call
              </b-tooltip> -->
@@ -82,15 +82,16 @@ export default {
         openContact(callerId){
             var passData = {};
             passData.action = "OPEN_CONTACT";
-            passData.contactId = callerId;
+            passData.callerId = callerId;
             console.log(passData)
             parent.postMessage(passData,"*");
         },
-        dialFromHistory(name,number) {
+        dialFromHistory(name,number,id) {
           console.log(name,number)
             makeOutboundCall(name,number)
             this.$store.dispatch("call/updateCallerName",name)
             this.$store.dispatch("actions/setOutboundCall", true)
+            this.$store.dispatch("call/updateCallerId",id)
             
 
             
@@ -149,7 +150,7 @@ export default {
 }
 
 .call-logs-list {
-  height: 328px;
+  height: 200px;
   overflow-x: hidden;
   overflow-y: scroll;
 }  

@@ -29,7 +29,7 @@ export function agentCallStatus() {
     console.log(contact)
 
     if(contact.length > 0) {
-        console.log(contact[0].getStatus());
+        console.log("THIS IS AGENT STAATUS=========",contact[0].getStatus());
         console.log(contact[0].getState());
         // contact.getState()
     }

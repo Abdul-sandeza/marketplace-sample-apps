@@ -113,7 +113,7 @@ export default {
   width: 106%;
   margin-left: -10px;
   left: 0;
-  bottom: 124px;
+  /* bottom: 124px; */
   background: #fff;
   text-align: center;
   padding: 9px;
