@@ -1,65 +1,74 @@
 <template>
-  <div class="quickconnect-container"> 
+  <div class="quickconnect-container">
     <div class="quick-connects-head">
-          <span class="quick-connects-title" > Quick Connects </span>
-        </div>
+      <span class="quick-connects-title"> Quick Connects </span>
+    </div>
 
-        <div class="quick-connects-body">
-        <h4 v-if="!quickconnects.length">No Agents in Quick Connects</h4>
-        <b-row :key= "index" v-for="(contact,index) in quickconnects">
-          <b-col cols="9">
-            <p class="quick-connects-name">{{ contact.name }} </p>
-          </b-col>
-          <b-col cols="3" class="text-left">
-            <font-awesome-icon class="contact-side-icon" style="color:#ccc;cursor:pointer" @click="OnQuickConnectCall(contact)" icon="phone-alt" size="sm"/>
-          </b-col>
-        </b-row>
-        </div>
+    <div class="quick-connects-body">
+      <h4 v-if="!quickconnects.length">No Agents in Quick Connects</h4>
+      <b-row :key="index" v-for="(contact, index) in quickconnects">
+        <b-col cols="9">
+          <p class="quick-connects-name">{{ contact.name }}</p>
+        </b-col>
+        <b-col cols="3" class="text-left">
+          <font-awesome-icon
+            class="contact-side-icon"
+            style="color:#ccc;cursor:pointer"
+            @click="OnQuickConnectCall(contact)"
+            icon="phone-alt"
+            size="sm"
+          />
+        </b-col>
+      </b-row>
+      <b-button
+        style="margin:0 7rem"
+        variant="primary"
+        @click="changeCallSubNav('call')"
+        >Back</b-button
+      >
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import "amazon-connect-streams";
-import "amazon-connect-chatjs"
-import { onAddConference } from "./../../lib/CallActions"
-import { checkThirdPartyStatus } from "../../lib/ContactRefresh"
+import 'amazon-connect-streams'
+import 'amazon-connect-chatjs'
+import { onAddConference } from './../../lib/CallActions'
+import { checkThirdPartyStatus } from '../../lib/ContactRefresh'
 
 export default {
   name: 'QuickConnects',
   data() {
-    return {
-
-    }
+    return {}
   },
-  created() {
-  },
+  created() {},
   methods: {
-    async OnQuickConnectCall(contact){
-      await onAddConference("quickconnect",contact)
-      let confStatus = await checkThirdPartyStatus();
-      if(confStatus == 'success') {
-        this.$store.dispatch("call/setCallType","conference")
-        this.$store.dispatch("actions/callSubNavigation","call")
+    changeCallSubNav(page) {
+      this.$store.dispatch('actions/callSubNavigation', page)
+    },
+    async OnQuickConnectCall(contact) {
+      await onAddConference('quickconnect', contact)
+      let confStatus = await checkThirdPartyStatus()
+      if (confStatus == 'success') {
+        this.$store.dispatch('call/setCallType', 'conference')
+        this.$store.dispatch('actions/callSubNavigation', 'call')
       } else {
         let postData = {}
-        postData.action = "SHOW_NOTIFICATION"
-        postData.type = "ERROR"
-        postMessage = "Outbound call not connected"
-        parent.postMessage('*',postData);
+        postData.action = 'SHOW_NOTIFICATION'
+        postData.type = 'ERROR'
+        postMessage = 'Outbound call not connected'
+        parent.postMessage('*', postData)
       }
-    }
+    },
   },
   computed: {
-    ...mapGetters([
-        'quickconnects'
-    ])
-  }
+    ...mapGetters(['quickconnects']),
+  },
 }
 </script>
 
 <style scoped>
-
 .contact-side-icon {
   margin-right: 5px;
   margin-left: 5px;
@@ -85,5 +94,4 @@ export default {
   font-weight: bold;
   font-size: 20px;
 }
-
 </style>
